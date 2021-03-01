@@ -34,6 +34,17 @@ namespace Auth0.NETCore3.Controllers
 
             var mgmntClient = new ManagementApi.ManagementApiClient(token.AccessToken, Configuration["Auth0:Domain"]);
 
+            var conns = await mgmntClient.Connections.GetAllAsync(new GetConnectionsRequest(), new ManagementApi.Paging.PaginationInfo());
+
+            foreach (var item in conns)
+            {
+                if (item.Name.IndexOf("Temp-Int") > -1)
+                {
+                    await mgmntClient.Connections.DeleteAsync(item.Id);
+                }
+
+            }
+
             return await mgmntClient.Clients.GetAllAsync(new GetClientsRequest(), new ManagementApi.Paging.PaginationInfo());
         }
     }

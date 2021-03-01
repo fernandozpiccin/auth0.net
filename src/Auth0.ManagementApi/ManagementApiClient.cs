@@ -167,6 +167,44 @@ namespace Auth0.ManagementApi
             Users = new UsersClient(managementConnection, baseUri, defaultHeaders);
         }
 
+        public ManagementApiClient(string clientId, string clientSecret, Uri baseUri, IManagementConnection managementConnection = null)
+        {
+            if (managementConnection == null)
+            {
+                var ownedManagementConnection = new HttpClientManagementConnection();
+                managementConnection = ownedManagementConnection;
+                connectionToDispose = ownedManagementConnection;
+            }
+
+            var tokenConnection = new TokenHttpClientManagementConnection(managementConnection);
+            // connection = managementConnection;
+
+            var defaultHeaders = CreateDefaultHeaders(null);
+
+            BlacklistedTokens = new BlacklistedTokensClient(tokenConnection, baseUri, defaultHeaders);
+            Branding = new BrandingClient(tokenConnection, baseUri, defaultHeaders);
+            ClientGrants = new ClientGrantsClient(tokenConnection, baseUri, defaultHeaders);
+            Clients = new ClientsClient(tokenConnection, baseUri, defaultHeaders);
+            Connections = new ConnectionsClient(tokenConnection, baseUri, defaultHeaders);
+            CustomDomains = new CustomDomainsClient(tokenConnection, baseUri, defaultHeaders);
+            DeviceCredentials = new DeviceCredentialsClient(tokenConnection, baseUri, defaultHeaders);
+            EmailProvider = new EmailProviderClient(tokenConnection, baseUri, defaultHeaders);
+            EmailTemplates = new EmailTemplatesClient(tokenConnection, baseUri, defaultHeaders);
+            Guardian = new GuardianClient(tokenConnection, baseUri, defaultHeaders);
+            Hooks = new HooksClient(tokenConnection, baseUri, defaultHeaders);
+            Jobs = new JobsClient(tokenConnection, baseUri, defaultHeaders);
+            Logs = new LogsClient(tokenConnection, baseUri, defaultHeaders);
+            LogStreams = new LogStreamsClient(tokenConnection, baseUri, defaultHeaders);
+            ResourceServers = new ResourceServersClient(tokenConnection, baseUri, defaultHeaders);
+            Roles = new RolesClient(tokenConnection, baseUri, defaultHeaders);
+            Rules = new RulesClient(tokenConnection, baseUri, defaultHeaders);
+            Stats = new StatsClient(tokenConnection, baseUri, defaultHeaders);
+            TenantSettings = new TenantSettingsClient(tokenConnection, baseUri, defaultHeaders);
+            Tickets = new TicketsClient(tokenConnection, baseUri, defaultHeaders);
+            UserBlocks = new UserBlocksClient(tokenConnection, baseUri, defaultHeaders);
+            Users = new UsersClient(tokenConnection, baseUri, defaultHeaders);
+        }
+
         private static Dictionary<string, string> CreateDefaultHeaders(string token)
         {
             var headers = new Dictionary<string, string> {
