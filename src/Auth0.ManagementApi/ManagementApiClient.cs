@@ -176,7 +176,7 @@ namespace Auth0.ManagementApi
                 connectionToDispose = ownedManagementConnection;
             }
 
-            var tokenConnection = new TokenHttpClientManagementConnection(managementConnection);
+            var tokenConnection = new TokenHttpClientManagementConnection(clientId, clientSecret, managementConnection);
             // connection = managementConnection;
 
             var defaultHeaders = CreateDefaultHeaders(null);
