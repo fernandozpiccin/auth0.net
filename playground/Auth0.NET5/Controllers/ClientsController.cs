@@ -25,14 +25,9 @@ namespace Auth0.NETCore3.Controllers
         [HttpGet]
         public async Task<IEnumerable<Client>> Get()
         {
-            var token = await _authClient.GetTokenAsync(new ClientCredentialsTokenRequest
-            {
-                Audience = $"https://{Configuration["Auth0:Domain"]}/api/v2/",
-                ClientId = Configuration["Auth0:ClientId"],
-                ClientSecret = Configuration["Auth0:ClientSecret"]
-            });
+        
 
-            var mgmntClient = new ManagementApi.ManagementApiClient(token.AccessToken, Configuration["Auth0:Domain"]);
+            var mgmntClient = new ManagementApi.ManagementApiClient(Configuration["Auth0:ClientId"], Configuration["Auth0:ClientSecret"], Configuration["Auth0:Domain"]);
 
             var conns = await mgmntClient.Connections.GetAllAsync(new GetConnectionsRequest(), new ManagementApi.Paging.PaginationInfo());
 

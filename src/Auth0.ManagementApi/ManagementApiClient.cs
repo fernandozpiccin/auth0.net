@@ -167,8 +167,9 @@ namespace Auth0.ManagementApi
             Users = new UsersClient(managementConnection, baseUri, defaultHeaders);
         }
 
-        public ManagementApiClient(string clientId, string clientSecret, Uri baseUri, IManagementConnection managementConnection = null)
+        public ManagementApiClient(string clientId, string clientSecret, string domain, IManagementConnection managementConnection = null)
         {
+            var baseUri = new Uri($"https://{domain}/api/v2");
             if (managementConnection == null)
             {
                 var ownedManagementConnection = new HttpClientManagementConnection();
@@ -176,7 +177,7 @@ namespace Auth0.ManagementApi
                 connectionToDispose = ownedManagementConnection;
             }
 
-            var tokenConnection = new TokenHttpClientManagementConnection(clientId, clientSecret, managementConnection);
+            var tokenConnection = new TokenHttpClientManagementConnection(clientId, clientSecret, domain, managementConnection);
             // connection = managementConnection;
 
             var defaultHeaders = CreateDefaultHeaders(null);
@@ -226,6 +227,7 @@ namespace Auth0.ManagementApi
             : this(token, new Uri($"https://{domain}/api/v2"), connection)
         {
         }
+
 
         /// <summary>
         /// Disposes of any owned disposable resources.
